@@ -2,17 +2,6 @@ import pygame
 import random
 import winsound
 
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
-
-
 """
 10 x 20 square grid
 shapes: S, Z, I, O, J, L, T
@@ -194,6 +183,9 @@ def check_lost(positions):
 
 def get_shape():
     return Piece(5, 0, random.choice(shapes))
+
+def draw_text_middle(text, size, color, surface):  
+    pass
    
 def draw_grid(surface, grid):
     sx = top_left_x
@@ -224,7 +216,7 @@ def clear_rows(grid, locked):
             if y < ind:
                 newKey = (x, y + inc)
                 locked[newKey] = locked.pop(key)
-        winsound.PlaySound(resource_path('clear'), winsound.SND_FILENAME)
+        winsound.PlaySound('clear', winsound.SND_FILENAME)
 
     return inc
 
@@ -288,8 +280,8 @@ def main(win):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                
                 run = False
+                pygame.display.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     current_piece.x -= 1
@@ -331,11 +323,11 @@ def main(win):
 
         if check_lost(locked_positions):
             run = False
-        if run == False:
-            pygame.quit()
     pygame.display.quit()
 
+def main_menu(win):
+    main(win)
 
 win = pygame.display.set_mode((s_width, s_height))
 pygame.display.set_caption('Tetris')
-main(win) 
+main_menu(win) 
